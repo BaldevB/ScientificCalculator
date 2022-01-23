@@ -20,13 +20,12 @@ class ScientificCalculator extends JFrame implements ActionListener {
         JPanel textpanel = new JPanel();
         tfield = new JTextField(25);
         tfield.setHorizontalAlignment(SwingConstants.RIGHT);
+        tfield.setEditable(false);
         tfield.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent keyevent) {
                 char c = keyevent.getKeyChar();
-                if (c >= '0' && c <= '9') {
-                } else {
+                if (c < '0' || c > '9')
                     keyevent.consume();
-                }
             }
         });
         textpanel.add(tfield);
@@ -148,6 +147,10 @@ class ScientificCalculator extends JFrame implements ActionListener {
         cont.add("Center", buttonpanel);
         cont.add("North", textpanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        Dimension centerpos = Toolkit.getDefaultToolkit().getScreenSize();
+        setLocation(centerpos.width / 2 - getWidth() / 2, centerpos.height / 2 - getHeight() / 2);
+        setLocationRelativeTo(null);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -249,6 +252,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             z = 0;
         }
         if (s.equals("log")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -258,6 +264,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("1/x")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -267,6 +276,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("Exp")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -276,6 +288,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("x^2")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -285,6 +300,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("x^3")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -310,6 +328,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("+")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
                 temp = 0;
@@ -324,6 +345,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             tfield.requestFocus();
         }
         if (s.equals("-")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
                 temp = 0;
@@ -338,6 +362,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             tfield.requestFocus();
         }
         if (s.equals("/")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
                 temp = 1;
@@ -352,6 +379,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             tfield.requestFocus();
         }
         if (s.equals("*")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
                 temp = 1;
@@ -392,6 +422,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("Sqrt")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -401,6 +434,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("SIN")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -410,6 +446,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("COS")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -419,6 +458,9 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("TAN")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -428,30 +470,12 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         if (s.equals("=")) {
-            if (tfield.getText().equals("")) {
-                tfield.setText("");
-            } else {
-                temp1 = Double.parseDouble(tfield.getText());
-                switch (ch) {
-                    case '+':
-                        result = temp + temp1;
-                        break;
-                    case '-':
-                        result = temp - temp1;
-                        break;
-                    case '/':
-                        result = temp / temp1;
-                        break;
-                    case '*':
-                        result = temp * temp1;
-                        break;
-                }
-                tfield.setText("");
-                tfield.setText(tfield.getText() + result);
-                z = 1;
-            }
+            simulateEqualTo();
         }
         if (s.equals("n!")) {
+            if (temp != 0)
+                simulateEqualTo();
+
             if (tfield.getText().equals("")) {
                 tfield.setText("");
             } else {
@@ -461,6 +485,31 @@ class ScientificCalculator extends JFrame implements ActionListener {
             }
         }
         tfield.requestFocus();
+    }
+
+    void simulateEqualTo() {
+        if (tfield.getText().equals("")) {
+            tfield.setText("");
+        } else {
+            temp1 = Double.parseDouble(tfield.getText());
+            switch (ch) {
+                case '+':
+                    result = temp + temp1;
+                    break;
+                case '-':
+                    result = temp - temp1;
+                    break;
+                case '/':
+                    result = temp / temp1;
+                    break;
+                case '*':
+                    result = temp * temp1;
+                    break;
+            }
+            tfield.setText("");
+            tfield.setText(tfield.getText() + result);
+            z = 1;
+        }
     }
 
     double fact(double x) {
@@ -475,16 +524,19 @@ class ScientificCalculator extends JFrame implements ActionListener {
         return s;
     }
 }
-    public class Main{
+
+public class Main{
         public static void main(String args[]) {
-            try {
-                UIManager
-                        .setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            } catch (Exception e) {
-            }
-            ScientificCalculator f = new ScientificCalculator();
-            f.setTitle("Scientific Calculator");
-            f.pack();
-            f.setVisible(true);
+//            try {
+//                UIManager
+//                        .setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//            } catch (Exception e) {
+//            }
+//            ScientificCalculator f = new ScientificCalculator();
+//            f.setTitle("Scientific Calculator");
+//            f.pack();
+//            f.setVisible(true);
+
+            Frame frame = new Frame();
         }
 }
